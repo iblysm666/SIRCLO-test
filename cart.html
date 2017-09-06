@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div id="output"></div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+	function Cart() {
+		this.productKey = [];
+		this.productList = [];
+
+		this.addProduct = function(productCode, quantity) {
+			if (this.productKey[productCode] == undefined) {
+				this.productKey[productCode] = quantity;
+
+				this.productList.push({'code': productCode, 'qty': quantity});
+			} else {
+				var newProductList = [];
+				$.each(this.productList, function (i, value) {
+					if (value['code'] == productCode) {
+						quantity = quantity + value['qty'];
+					}
+
+					newProductList.push({'code': productCode, 'qty': quantity});
+				});
+
+				this.productList = newProductList;
+			}
+		},
+
+		this.removeProduct = function(productCode) {
+
+			var newProductList = [];
+			$.each(this.productList, function (i, value) {
+				if (value['code'] !== productCode) {
+					newProductList.push({'code': value['code'], 'qty': value['qty']});
+				}
+			});
+
+			this.productList = newProductList;
+
+			delete this.productKey[productCode];
+		},
+
+		this.showCart = function() {
+
+			$.each(this.productList, function (i, value) {
+				$('#output').append('<p>' + value['code'] + ' (' + value['qty'] + ')' + '</p>');
+			});
+		}
+	};
+
+	var cart = new Cart();
+
+	cart.addProduct("Baju Merah Mantap", 1);
+	cart.addProduct("Baju Merah Mantap", 1);
+	cart.addProduct("Bukuku", 3);
+	cart.removeProduct("Bukuku");
+	cart.addProduct("Singlet Hijau", 1);
+	cart.removeProduct("ProdukBohongan");
+
+	cart.showCart();
+</script>
+</html>
